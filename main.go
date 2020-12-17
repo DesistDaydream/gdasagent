@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/thedevsaddam/gojsonq/v2"
 )
 
@@ -32,7 +34,8 @@ func main() {
 
 	// 获取 Token
 	c.GetToken()
-	// 关闭连接
+
+	fmt.Printf("获取到的 Token 为：%v\n", c.Token)
 
 	// 计算数据
 	// 待开发

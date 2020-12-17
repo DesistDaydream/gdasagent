@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	simplejson "github.com/bitly/go-simplejson"
 )
 
 // ConnInfo 连接信息
@@ -37,7 +39,7 @@ func (c *ConnInfo) ConnectionGdas() (resp *http.Response, err error) {
 	req.Header.Set("stime", c.Stime)
 	req.Header.Set("nonce", c.Nonce)
 	req.Header.Set("signature", c.Signature)
-	req.Header.Set("referer", c.Referer)
+	req.Header.Set("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
 
 	// 忽略证书验证
 	tr := &http.Transport{
@@ -55,27 +57,37 @@ func (c *ConnInfo) ConnectionGdas() (resp *http.Response, err error) {
 // GetToken 获取 Token
 func (c *ConnInfo) GetToken() (err error) {
 	// 设置 json 格式的 request body
-	jsonStr := []byte(`{"userName": "system","passWord": "d153850931040e5c81e1c7508ded25f5f0ae76cb57dc1997bc343b878946ba23"}`)
-	fmt.Println("认证信息为：", bytes.NewBuffer(jsonStr))
+	jsonReqBody := []byte(`{"userName":"system","passWord":"d153850931040e5c81e1c7508ded25f5f0ae76cb57dc1997bc343b878946ba23"}`)
+	fmt.Println("认证信息为：", bytes.NewBuffer(jsonReqBody))
+	// 设置 URL
+	url := fmt.Sprintf("https://%v:%v/v1/login", c.Addr, c.Port)
+	fmt.Printf("URL 为：%v\n", url)
+	// 设置 Request 信息
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonReqBody))
+	req.Header.Set("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Cookie", "JSESSIONID=D18B13CD1CD52A3A417BDE4B5C8948DB")
 
 	// 忽略证书验证
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	// 建立连接
-	url := fmt.Sprintf("https://%v:%v/v1/login", c.Addr, c.Port)
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-	req.Header.Set("referer", "https://172.38.30.192/gdas")
-
-	// 获取响应
+	// 发送 Request 并获取 Response
 	resp, err := (&http.Client{Transport: tr}).Do(req)
 	if err != nil {
 		panic(err)
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	bodystr := string(body)
+	defer resp.Body.Close()
 
-	fmt.Println(bodystr)
-	// c.Token = bodystr
+	fmt.Printf("Response 信息为：%v\n：", resp)
+	fmt.Printf("Request 信息为：%v\n", resp.Request)
+
+	// 处理 Response Body,并获取 Token
+	body, err := ioutil.ReadAll(resp.Body)
+	js, err := simplejson.NewJson(body)
+	fmt.Printf("本次响应的 Body 为：%v\n响应中的 result 字段为：%v\n", body, js.Get("result"))
+
+	// c.Token = js.Get("result")
+
 	return
 }
