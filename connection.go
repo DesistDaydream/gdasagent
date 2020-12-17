@@ -64,9 +64,11 @@ func (c *ConnInfo) GetToken() (err error) {
 	fmt.Printf("URL 为：%v\n", url)
 	// 设置 Request 信息
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonReqBody))
-	req.Header.Set("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Cookie", "JSESSIONID=D18B13CD1CD52A3A417BDE4B5C8948DB")
+	// req.Header.Add("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
+	// req.Header.Add("Cookie", "JSESSIONID=A3A81CF6835CA074957F2B1E838CB5A9")
+	// req.Header.Add("Postman-Token", "e5759bb9-3c5c-40b4-911a-cf971dc61b95")
+	// req.Header.Add("Content-Length", "101")
+	// req.Header.Add("Host", "172.38.30.192:8003")
 
 	// 忽略证书验证
 	tr := &http.Transport{
@@ -85,7 +87,7 @@ func (c *ConnInfo) GetToken() (err error) {
 	// 处理 Response Body,并获取 Token
 	body, err := ioutil.ReadAll(resp.Body)
 	js, err := simplejson.NewJson(body)
-	fmt.Printf("本次响应的 Body 为：%v\n响应中的 result 字段为：%v\n", body, js.Get("result"))
+	fmt.Printf("本次响应的 Body 为：%v\n响应中的 result 字段为：%v\n", string(body), js.Get("result"))
 
 	// c.Token = js.Get("result")
 
