@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/thedevsaddam/gojsonq/v2"
 )
 
 // 从 API 获取数据
@@ -33,8 +31,9 @@ func main() {
 	c.Port = 8003
 
 	// 获取 Token
-	c.GetToken()
-
+	if err := c.GetToken(); err != nil {
+		fmt.Printf("获取token失败，失败原因：%v\n", err)
+	}
 	fmt.Printf("获取到的 Token 为：%v\n", c.Token)
 
 	// 计算数据
@@ -42,7 +41,4 @@ func main() {
 
 	// 将数据写入到文件中
 	// 待开发
-	const json = `{"name":{"first":"Tom","last":"Hanks"},"age":61}`
-	name := gojsonq.New().FromString(json).Find("name.first")
-	println(name.(string)) // Tom
 }
