@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"strconv"
 
 	simplejson "github.com/bitly/go-simplejson"
 )
@@ -37,6 +38,7 @@ func GetMaxAvailable(c *ConnInfo) (m float64, err error) {
 	}
 	fmt.Printf("当前共有 %v 个盘匣，其中 %v 个未分配\n", len(jsonRespBody.Get("rfid").MustArray()), undistributedCount)
 	m = undistributedCount * 2.59
+	m, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", m), 64)
 
 	return
 }
