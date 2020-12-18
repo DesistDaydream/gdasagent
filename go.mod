@@ -1,4 +1,4 @@
-module gdasagent
+module github.com/DesistDaydream/gdasagent
 
 go 1.15
 
