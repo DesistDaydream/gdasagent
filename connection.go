@@ -29,16 +29,13 @@ func NewConnInfo() *ConnInfo {
 	return &ConnInfo{}
 }
 
-// ConnectionGdas 建立 Gdas 连接
+// ConnectionGdas 根据给定的 path 建立 Gdas 连接
 func (c *ConnInfo) ConnectionGdas() (resp *http.Response, err error) {
 
-	url := fmt.Sprintf("https://%v:%v%v", c.Addr, c.Port, c.Path)
+	url := fmt.Sprintf("https://%v:%v/%v", c.Addr, c.Port, c.Path)
 	// 设置请求头
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("token", c.Token)
-	req.Header.Set("stime", c.Stime)
-	req.Header.Set("nonce", c.Nonce)
-	req.Header.Set("signature", c.Signature)
 	req.Header.Set("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
 
 	// 忽略证书验证
@@ -79,11 +76,11 @@ func (c *ConnInfo) GetToken() (err error) {
 	// 处理 Response Body,并获取 Token
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return
 	}
 	jsonRespBody, err := simplejson.NewJson(respBody)
 	if err != nil {
-		return err
+		return
 	}
 	// fmt.Printf("本次响应的 Body 为：%v\n响应中的 result 字段为：%v\n", string(body), js.Get("result"))
 	c.Token, _ = jsonRespBody.Get("token").String()

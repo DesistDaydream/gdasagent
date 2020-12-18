@@ -4,24 +4,19 @@ import (
 	"fmt"
 )
 
+// Data 存储空间属性
+type Data struct {
+	MaxAvailable float64
+	MaxSalable   string
+	Used         string
+}
+
+// NewData 实例化 Data
+func NewData() *Data {
+	return &Data{}
+}
+
 // 从 API 获取数据
-
-// // Data 存储空间属性
-// type Data struct {
-// 	MaxAvailable string
-// 	MaxSalable   string
-// 	Used         string
-// }
-
-// // NewData 实例化 Data
-// func (d *Data) NewData(ma string, ms string, u string) *Data {
-// 	return &Data{
-// 		MaxAvailable: ma,
-// 		MaxSalable:   ms,
-// 		Used:         u,
-// 	}
-// }
-
 func main() {
 	c := NewConnInfo()
 	// 获取一些请求参数
@@ -37,7 +32,12 @@ func main() {
 	fmt.Printf("获取到的 Token 为：%v\n", c.Token)
 
 	// 计算数据
-	// 待开发
+	d := NewData()
+	d.MaxAvailable, _ = GetMaxAvailable(c)
+	fmt.Printf("当前最大可用容量为 %vTiB\n", d.MaxAvailable)
+	fmt.Printf("当前最大可售卖容量为 %vTiB\n", d.MaxAvailable)
+	// 当前已使用容量待开发
+	fmt.Printf("当前已使用容量为 %vTiB\n", d.Used)
 
 	// 将数据写入到文件中
 	// 待开发
