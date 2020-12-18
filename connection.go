@@ -17,24 +17,27 @@ type ConnInfo struct {
 	Port   int
 	Path   string
 	// 认证信息
-	Token     string
-	Stime     string
-	Nonce     string
-	Signature string
-	Referer   string
+	Token   string
+	Referer string
 }
 
 // NewConnInfo 实例化连接信息
 func NewConnInfo() *ConnInfo {
-	return &ConnInfo{}
+	return &ConnInfo{
+		Method:  "GET",
+		Addr:    "",
+		Port:    0,
+		Path:    "",
+		Token:   "",
+		Referer: "",
+	}
 }
 
 // ConnectionGdas 根据给定的 path 建立 Gdas 连接
 func (c *ConnInfo) ConnectionGdas() (resp *http.Response, err error) {
-
 	url := fmt.Sprintf("https://%v:%v/%v", c.Addr, c.Port, c.Path)
 	// 设置请求头
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest(c.Method, url, nil)
 	req.Header.Set("token", c.Token)
 	req.Header.Set("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
 
@@ -47,12 +50,30 @@ func (c *ConnInfo) ConnectionGdas() (resp *http.Response, err error) {
 	if resp, err = (&http.Client{Transport: tr}).Do(req); err != nil {
 		panic(err)
 	}
-
 	return
 }
 
-// GetToken 获取 Token
-func (c *ConnInfo) GetToken() (err error) {
+// ConnectionXSky 根据给定的 path 建立 XSky 连接
+func (c *ConnInfo) ConnectionXSky() (resp *http.Response, err error) {
+	url := fmt.Sprintf("https://%v:%v/%v", c.Addr, c.Port, c.Path)
+	// 设置请求头
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("token", c.Token)
+
+	// 忽略证书验证
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	// 建立连接
+	if resp, err = (&http.Client{Transport: tr}).Do(req); err != nil {
+		panic(err)
+	}
+	return
+}
+
+// GetGdasToken 获取 Token
+func (c *ConnInfo) GetGdasToken() (err error) {
 	// 设置 json 格式的 request body
 	jsonReqBody := []byte(`{"userName":"system","passWord":"d153850931040e5c81e1c7508ded25f5f0ae76cb57dc1997bc343b878946ba23"}`)
 	// 设置 URL
