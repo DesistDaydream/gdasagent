@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 )
 
 // Data 存储空间属性
@@ -40,5 +42,9 @@ func main() {
 	fmt.Printf("当前已使用容量为 %vTiB\n", d.Used)
 
 	// 将数据写入到文件中
-	// 待开发
+	// 将结构体数据转为 JSON 数据
+	result, _ := json.Marshal(d)
+	fmt.Println(string(result))
+	// 写入文件
+	ioutil.WriteFile("info.json", result, 0644)
 }
