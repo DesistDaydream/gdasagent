@@ -75,7 +75,8 @@ func (c *ConnInfo) ConnectionXSky() (resp *http.Response, err error) {
 // GetGdasToken 获取 Token
 func (c *ConnInfo) GetGdasToken() (err error) {
 	// 设置 json 格式的 request body
-	jsonReqBody := []byte(`{"userName":"system","passWord":"d153850931040e5c81e1c7508ded25f5f0ae76cb57dc1997bc343b878946ba23"}`)
+	// json :=
+	jsonReqBody := []byte("{\"userName\":\"" + yamlConfig.Gdas.Username + "\",\"passWord\":\"" + yamlConfig.Gdas.Password + "\"}")
 	// 设置 URL
 	url := fmt.Sprintf("https://%v:%v/v1/login", c.Addr, c.Port)
 	// 设置 Request 信息
@@ -111,12 +112,13 @@ func (c *ConnInfo) GetGdasToken() (err error) {
 // GetXSkyToken 获取 XSky Token
 func (c *ConnInfo) GetXSkyToken() (err error) {
 	// 设置 json 格式的 request body
-	jsonReqBody := []byte(`{"auth":{"name":"admin","password":"admin"}}`)
+	// json :=
+	jsonReqBody := []byte("{\"auth\":{\"name\":\"" + yamlConfig.Xsky.Username + "\",\"password\":\"" + yamlConfig.Xsky.Password + "\"}}")
+	// jsonReqBody := []byte(`{"auth":{"name":"admin","password":"admin"}}`)
 	// 设置 URL
 	url := fmt.Sprintf("http://%v:%v/api/v1/auth/tokens:login", c.Addr, c.Port)
 	// 设置 Request 信息
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonReqBody))
-	req.Header.Add("referer", fmt.Sprintf("https://%v:%v/gdas", c.Addr, c.Port))
 	req.Header.Add("Content-Type", "application/json")
 
 	// 发送 Request 并获取 Response

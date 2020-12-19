@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 )
 
-// Data 存储空间属性
+// Data 要展示的数据应该具有的属性
 type Data struct {
 	MaxAvailable float64 `json:"MaxAvailable"`
 	MaxSalable   float64 `json:"MaxSalable"`
@@ -25,8 +25,8 @@ func NewData() *Data {
 // GetGdasData 从 Gdas 中获取数据
 func GetGdasData(c *ConnInfo, d *Data) (err error) {
 	// 设置基本连接参数
-	c.Addr = "172.38.30.192"
-	c.Port = 8003
+	c.Addr = yamlConfig.Gdas.IP
+	c.Port = yamlConfig.Gdas.Port
 	// 获取 Token
 	if err := c.GetGdasToken(); err != nil {
 		fmt.Printf("获取 Gdas Token 失败，失败原因：%v\n", err)
@@ -44,8 +44,8 @@ func GetGdasData(c *ConnInfo, d *Data) (err error) {
 // GetXSkyData 从 XSky 中获取数据
 func GetXSkyData(c *ConnInfo, d *Data) (err error) {
 	// 设置基本连接参数
-	c.Addr = "10.20.5.98"
-	c.Port = 8056
+	c.Addr = yamlConfig.Xsky.IP
+	c.Port = yamlConfig.Xsky.Port
 	// 获取 Token
 	if err := c.GetXSkyToken(); err != nil {
 		fmt.Printf("获取 XSky Token 失败，失败原因：%v\n", err)
@@ -59,12 +59,16 @@ func GetXSkyData(c *ConnInfo, d *Data) (err error) {
 	return
 }
 
-// 从 API 获取数据
+// 赶工作品，有待优化
+// 优化点1：获取 Token 操作最好放在 middleware 目录中，作为 中间件 来使用
+// 优化点2：代码过于流水账，无 go 哲学思想的体现
+// 优化点3：各个结构体属性需要精简
+// 优化点4：感觉 connection.go 有问题，但是想不到在哪
 func main() {
 	c := NewConnInfo()
 	d := NewData()
 	// 通过文件读取参数
-	// 待开发
+	// 在 yaml.go 中通过 config.yaml 文件获取数据
 
 	// GetGdasData 从 Gdas 中获取数据
 	GetGdasData(c, d)

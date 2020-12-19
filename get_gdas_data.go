@@ -11,7 +11,7 @@ import (
 // GetMaxAvailable 获取最大可用的存储空间
 func GetMaxAvailable(c *ConnInfo) (m float64, err error) {
 	// 查询盘匣列表
-	c.Path = "v1/magazines"
+	c.Path = yamlConfig.Gdas.Path
 	resp, err := c.ConnectionGdas()
 	defer resp.Body.Close()
 

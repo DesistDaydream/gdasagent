@@ -1,0 +1,12 @@
+gdas:
+  ip: "172.38.30.192"
+  port: 8003
+  path: "v1/magazines"
+  username: "system"
+  password: "d153850931040e5c81e1c7508ded25f5f0ae76cb57dc1997bc343b878946ba23"
+xsky:
+  ip: "10.20.5.98"
+  port: 8056
+  path: "v1/cluster"
+  username: "admin"
+  password: "admin"
