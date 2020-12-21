@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/DesistDaydream/gdasagent/config"
 	simplejson "github.com/bitly/go-simplejson"
 )
 
@@ -76,7 +77,7 @@ func (c *ConnInfo) ConnectionXSky() (resp *http.Response, err error) {
 func (c *ConnInfo) GetGdasToken() (err error) {
 	// 设置 json 格式的 request body
 	// json :=
-	jsonReqBody := []byte("{\"userName\":\"" + yamlConfig.Gdas.Username + "\",\"passWord\":\"" + yamlConfig.Gdas.Password + "\"}")
+	jsonReqBody := []byte("{\"userName\":\"" + config.YamlConfig.Gdas.Username + "\",\"passWord\":\"" + config.YamlConfig.Gdas.Password + "\"}")
 	// 设置 URL
 	url := fmt.Sprintf("https://%v:%v/v1/login", c.Addr, c.Port)
 	// 设置 Request 信息
@@ -113,7 +114,7 @@ func (c *ConnInfo) GetGdasToken() (err error) {
 func (c *ConnInfo) GetXSkyToken() (err error) {
 	// 设置 json 格式的 request body
 	// json :=
-	jsonReqBody := []byte("{\"auth\":{\"name\":\"" + yamlConfig.Xsky.Username + "\",\"password\":\"" + yamlConfig.Xsky.Password + "\"}}")
+	jsonReqBody := []byte("{\"auth\":{\"name\":\"" + config.YamlConfig.Xsky.Username + "\",\"password\":\"" + config.YamlConfig.Xsky.Password + "\"}}")
 	// jsonReqBody := []byte(`{"auth":{"name":"admin","password":"admin"}}`)
 	// 设置 URL
 	url := fmt.Sprintf("http://%v:%v/api/v1/auth/tokens:login", c.Addr, c.Port)

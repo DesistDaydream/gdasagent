@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+
+	"github.com/DesistDaydream/gdasagent/config"
 )
 
 // Data 要展示的数据应该具有的属性
@@ -25,8 +27,8 @@ func NewData() *Data {
 // GetGdasData 从 Gdas 中获取数据
 func GetGdasData(c *ConnInfo, d *Data) (err error) {
 	// 设置基本连接参数
-	c.Addr = yamlConfig.Gdas.IP
-	c.Port = yamlConfig.Gdas.Port
+	c.Addr = config.YamlConfig.Gdas.IP
+	c.Port = config.YamlConfig.Gdas.Port
 	// 获取 Token
 	if err = c.GetGdasToken(); err != nil {
 		fmt.Printf("获取 Gdas Token 失败，失败原因：%v\n", err)
@@ -44,8 +46,8 @@ func GetGdasData(c *ConnInfo, d *Data) (err error) {
 // GetXSkyData 从 XSky 中获取数据
 func GetXSkyData(c *ConnInfo, d *Data) (err error) {
 	// 设置基本连接参数
-	c.Addr = yamlConfig.Xsky.IP
-	c.Port = yamlConfig.Xsky.Port
+	c.Addr = config.YamlConfig.Xsky.IP
+	c.Port = config.YamlConfig.Xsky.Port
 	// 获取 Token
 	if err = c.GetXSkyToken(); err != nil {
 		fmt.Printf("获取 XSky Token 失败，失败原因：%v\n", err)

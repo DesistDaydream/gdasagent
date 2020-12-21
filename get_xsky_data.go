@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"strconv"
 
+	"github.com/DesistDaydream/gdasagent/config"
 	simplejson "github.com/bitly/go-simplejson"
 )
 
 // GetUsed 获取用户已使用空间
 func GetUsed(c *ConnInfo) (u float64, err error) {
 	// 查询 cluster 信息
-	c.Path = yamlConfig.Xsky.Path
+	c.Path = config.YamlConfig.Xsky.Path
 	resp, err := c.ConnectionXSky()
 	defer resp.Body.Close()
 

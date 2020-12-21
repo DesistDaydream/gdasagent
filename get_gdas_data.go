@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"strconv"
 
+	"github.com/DesistDaydream/gdasagent/config"
 	simplejson "github.com/bitly/go-simplejson"
 )
 
 // GetMaxAvailable 获取最大可用的存储空间
 func GetMaxAvailable(c *ConnInfo) (m float64, err error) {
 	// 查询盘匣列表
-	c.Path = yamlConfig.Gdas.Path
+	c.Path = config.YamlConfig.Gdas.Path
 	resp, err := c.ConnectionGdas()
 	defer resp.Body.Close()
 

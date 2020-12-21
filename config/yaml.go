@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"io/ioutil"
@@ -13,7 +13,7 @@ type Config struct {
 	Xsky Xsky `yaml:"xsky"`
 }
 
-var yamlConfig Config
+var YamlConfig Config
 
 // Gdas is
 type Gdas struct {
@@ -40,8 +40,8 @@ func init() {
 		log.Fatalf("获取配置文件错误：%v", err)
 	}
 
-	if err = yaml.Unmarshal(file, &yamlConfig); err != nil {
+	if err = yaml.Unmarshal(file, &YamlConfig); err != nil {
 		log.Fatalf("解析配置文件错误：%v", err)
 	}
-	// fmt.Println(yamlConfig)
+	// fmt.Println(YamlConfig)
 }
