@@ -83,5 +83,5 @@ func main() {
 	result, _ := json.Marshal(d)
 	// fmt.Println("将要写入文件中的数据：", string(result))
 	// 写入文件
-	ioutil.WriteFile("/tmp/info.json", result, 0644)
+	ioutil.WriteFile("./info.json", result, 0644)
 }
