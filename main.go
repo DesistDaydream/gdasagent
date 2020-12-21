@@ -28,7 +28,7 @@ func GetGdasData(c *ConnInfo, d *Data) (err error) {
 	c.Addr = yamlConfig.Gdas.IP
 	c.Port = yamlConfig.Gdas.Port
 	// 获取 Token
-	if err := c.GetGdasToken(); err != nil {
+	if err = c.GetGdasToken(); err != nil {
 		fmt.Printf("获取 Gdas Token 失败，失败原因：%v\n", err)
 	}
 	fmt.Printf("获取到的 Gdas Token 为：%v\n", c.Token)
@@ -47,7 +47,7 @@ func GetXSkyData(c *ConnInfo, d *Data) (err error) {
 	c.Addr = yamlConfig.Xsky.IP
 	c.Port = yamlConfig.Xsky.Port
 	// 获取 Token
-	if err := c.GetXSkyToken(); err != nil {
+	if err = c.GetXSkyToken(); err != nil {
 		fmt.Printf("获取 XSky Token 失败，失败原因：%v\n", err)
 	}
 	fmt.Printf("获取到的 XSky Token 为：%v\n", c.Token)
